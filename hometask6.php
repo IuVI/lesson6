@@ -76,8 +76,63 @@
 	}
 	$list = array("", "(", ")", "()", "(())", "(()", "())", "())(", "(())", "x", "(x", "()x", "x)", "x(y(z))", "x(y)z)(", "(((())))");
 	foreach($list as $str){
-		echo "\"" . $str . "\"" . (psymmetry($str) ? "-ok" : "-NOPE") . "\n";
+		echo "\"" . $str . "\"" . (psymmetry($str) ? "-ok" : "-NOPE") . "\n";	
 	}
+	echo "<hr>";
+	echo "Завдання 6. Перетворити із строки у масив слів аналогічно explode <br>";
+	$text = "Завдання 6. Перетворити із строки у масив слів аналогічно explode";
+	echo "<br> результат, що повертає explode()<br>";
+	$t = explode(" ", $text);
+	print_r($t);
+	echo "<br>";
+	/*Звертаю увагу, що функція str_split, яку можна було б використати для перетворення англомовного тексту на массив
+	некоректно працює з multibyte text,
+	як наслідок некоректно відображає перетворений масив(при цьому Encoding, charset, та інші танці навколо формату тексту не дають
+	жодних результатів, оскільки в тілі відповіді CHARSET = UTF-8.*/
+	function sawtext($delim, $string) {
+		$arr = preg_split('//u', $string, null, PREG_SPLIT_NO_EMPTY);
+		$rslt = array();
+		$len = count($arr);
+		$i = 0;
+		$wrd = '';
+		for ($i=0; $i < $len; $i++) {
+			if ($arr[$i] != $delim && $i != $len - 1) {
+				$wrd = $wrd . $arr[$i];
+			} elseif ($i == $len -1) {
+				$rslt[] = $wrd . $arr[$i];
+			} else {
+				$rslt[] = $wrd;
+				$wrd = '';
+			}
+		}
+		return $rslt;
+		}
+	echo "результат, що повертає моя функція<br>";
+	print_r(sawtext(" ", $text));
+	echo "<hr>";
+	echo "Завдання 7. Перетворити із масива у строку аналогічно implode <br>";
+	$array = array('+38(068)9876543', '+38(067)1234567', '+38(099)2798134');
+	$array2 = array(380689876543, 380671234567, 380992798134);
+	echo "Так працює функція implode(): <br>";
+	echo implode(" ", $array);
+	echo "<br>";
+	echo implode(" ", $array2);
+	echo "<br>";
+	function implodius($glue, $pieces) {
+		$txt = '';
+		$i = 0;
+		$len = count($pieces) - 1;
+		foreach ($pieces as $value) {
+			$i < $len ? $txt = $txt . $value . $glue : $txt = $txt . $value;
+			$i++;
+		}
+		return $txt;
+	}
+	echo "Так працює моя функція implodius(): <br>";
+	echo implodius(" ", $array);
+	echo "<br>";
+	echo implode(" ", $array2);
+	echo "Завдання 8. Перетворити із масива у строку аналогічно implode <br>";
 ?>
 </body>
 </html>
